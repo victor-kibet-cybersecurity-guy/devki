@@ -1,0 +1,13 @@
+
+"use strict";
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+const menu=$(".menu-btn"), nav=$("#siteNav");
+if(menu&&nav)menu.addEventListener("click",()=>{const o=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(o));menu.textContent=o?"×":"☰";});
+$$(".navlinks a").forEach(a=>a.addEventListener("click",()=>{nav?.classList.remove("open");if(menu){menu.setAttribute("aria-expanded","false");menu.textContent="☰";}}));
+const observer="IntersectionObserver"in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");observer.unobserve(e.target)}}),{threshold:.08}):null;
+$$(".reveal").forEach(el=>observer?observer.observe(el):el.classList.add("visible"));
+const topBtn=$(".backtop");window.addEventListener("scroll",()=>topBtn?.classList.toggle("show",scrollY>700),{passive:true});topBtn?.addEventListener("click",()=>scrollTo({top:0,behavior:"smooth"}));
+$$(".faq-q").forEach(q=>q.addEventListener("click",()=>{const item=q.closest(".faq-item");item.classList.toggle("open");q.setAttribute("aria-expanded",String(item.classList.contains("open")));}));
+const form=$("#waForm"); if(form)form.addEventListener("submit",e=>{e.preventDefault();const fd=new FormData(form),get=k=>(fd.get(k)||"").toString().trim(),msg=$("#formMsg");if(!get("name")||!get("phone")||!get("county")||!get("product")||!get("message")){msg.textContent="Please complete all required fields.";return;}const text=`Hello DEVKI GROUP OF COMPANIES.\n\nName: ${get("name")}\nPhone: ${get("phone")}\nEmail: ${get("email")}\nCompany: ${get("company")}\nCounty: ${get("county")}\nProduct: ${get("product")}\nQuantity: ${get("quantity")}\n\nEnquiry:\n${get("message")}\n\nPlease assist me with my enquiry.`;window.open("https://wa.me/254735361747?text="+encodeURIComponent(text),"_blank","noopener,noreferrer");msg.textContent="Your WhatsApp enquiry is ready.";}));
+
+const cfb=document.getElementById("countyFindBtn");cfb?.addEventListener("click",()=>{const county=document.getElementById("countyFinder").value,product=document.getElementById("countyProduct").value,out=document.getElementById("countyFindResult");if(!county){out.textContent="Select a county first.";return;}const url="https://wa.me/254735361747?text="+encodeURIComponent(`Hello DEVKI GROUP OF COMPANIES. I am in ${county} County and I am looking for ${product}. Please advise on current supply options and quotation.`);out.innerHTML=`Product availability differs by location. <a class="link" target="_blank" rel="noopener noreferrer" href="${url}">Ask about ${product} supply to ${county} County →</a>`;});
